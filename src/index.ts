@@ -1,12 +1,10 @@
 import {
-	AttachmentBuilder,
+	type AttachmentBuilder,
 	Client,
-	EmbedBuilder,
+	type EmbedBuilder,
 	GatewayIntentBits,
 } from "discord.js";
-import { heroes } from "./heroes";
-import Elysia from "elysia";
-import staticPlugin from "@elysiajs/static";
+import { getRandomHero } from "./heroes";
 
 const client = new Client({
 	intents: [
@@ -28,17 +26,20 @@ client.on("interactionCreate", async (interaction) => {
 			const role: "all" | "support" | "tank" | "dps" =
 				interaction.options.getString("role") || "all";
 
-			const index = Math.floor(Math.random() * heroes[role].length);
-			const hero = heroes[role].at(index) as string;
+			const embeds: EmbedBuilder[] = [];
+			const files: AttachmentBuilder[] = [];
 
-			const file = new AttachmentBuilder(`assets/${hero}.png`);
-			const embed = new EmbedBuilder()
-				.setTitle(hero)
-				.setColor(`#${Math.floor(Math.random() * 16777215).toString(16)}`)
-				.setDescription(role === "all" ? "Random Hero" : `Random ${role} Hero`)
-				.setImage(`attachment://${hero}.png`);
+			const mainHero = getRandomHero(role);
+			embeds.push(mainHero?.embed);
+			files.push(mainHero?.file);
 
-			interaction.reply({ embeds: [embed], files: [file] });
+			if (interaction.options.getBoolean("backup")) {
+				const backupHero = getRandomHero(role);
+				embeds.push(backupHero?.embed);
+				files.push(backupHero?.file);
+			}
+
+			interaction.reply({ embeds, files });
 			break;
 		}
 		default: {

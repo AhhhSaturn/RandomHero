@@ -26,6 +26,9 @@ const commands = [
 					{ name: "Dps", value: "dps" },
 					{ name: "Support", value: "support" },
 				),
+		)
+		.addBooleanOption((option) =>
+			option.setName("backup").setDescription("have a backup hero"),
 		),
 ];
 const commandJson: RESTPostAPIApplicationCommandsJSONBody[] = [];
