@@ -50,7 +50,7 @@ commandMap.set("random", (interaction) => {
 commandMap.set("debuff", async (interaction) => {
 	interaction.reply("Remember you asked for this...");
 	const debuff = getDebuff();
-	await Bun.sleep(1000);
+	await Bun.sleep(2500);
 	interaction.editReply(`***${debuff} >:]***`);
 });
 
