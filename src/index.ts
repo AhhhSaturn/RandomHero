@@ -20,7 +20,6 @@ const client = new Client({
 
 client.on("ready", async (client) => {
 	console.log(`logged in as ${client.user.username}`);
-	console.log("latest commit:", await Bun.file(".git/COMMIT_EDITMSG").text());
 });
 
 const commandMap = new Map<
