@@ -1,10 +1,13 @@
 import {
 	type AttachmentBuilder,
+	type CacheType,
+	type ChatInputCommandInteraction,
 	Client,
 	type EmbedBuilder,
 	GatewayIntentBits,
 } from "discord.js";
 import { getRandomHero } from "./heroes";
+import { getDebuff } from "./debuff";
 
 const client = new Client({
 	intents: [
@@ -19,36 +22,49 @@ client.on("ready", (client) => {
 	console.log(`logged in as ${client.user.username}`);
 });
 
-client.on("interactionCreate", async (interaction) => {
-	if (!interaction.isCommand()) return;
-	switch (interaction.commandName) {
-		case "random": {
-			const role: "all" | "support" | "tank" | "dps" =
-				interaction.options.getString("role") || "all";
+const commandMap = new Map<
+	string,
+	(interaction: ChatInputCommandInteraction<CacheType>) => void
+>();
 
-			const embeds: EmbedBuilder[] = [];
-			const files: AttachmentBuilder[] = [];
+commandMap.set("random", (interaction) => {
+	const role: "all" | "support" | "tank" | "dps" =
+		interaction.options.getString("role") || "all";
 
-			const mainHero = getRandomHero(role);
-			embeds.push(mainHero?.embed);
-			files.push(mainHero?.file);
+	const embeds: EmbedBuilder[] = [];
+	const files: AttachmentBuilder[] = [];
 
-			if (interaction.options.getBoolean("backup")) {
-				const backupHero = getRandomHero(role);
-				embeds.push(backupHero?.embed);
-				files.push(backupHero?.file);
-			}
+	const mainHero = getRandomHero(role);
+	embeds.push(mainHero?.embed);
+	files.push(mainHero?.file);
 
-			interaction.reply({ embeds, files });
-			break;
-		}
-		default: {
-			interaction.reply({
-				content: "Command not configured",
-				flags: "Ephemeral",
-			});
-		}
+	if (interaction.options.getBoolean("backup")) {
+		const backupHero = getRandomHero(role);
+		embeds.push(backupHero?.embed);
+		files.push(backupHero?.file);
 	}
+
+	interaction.reply({ embeds, files });
+});
+
+commandMap.set("debuff", async (interaction) => {
+	interaction.reply("Remember you asked for this...");
+	const debuff = getDebuff();
+	await Bun.sleep(1000);
+	interaction.editReply(`***${debuff} >:]***`);
+});
+
+client.on("interactionCreate", async (interaction) => {
+	if (!interaction.isChatInputCommand()) return;
+	const command = commandMap.get(interaction.commandName);
+	if (!command) {
+		interaction.reply({
+			content: "Command not configured",
+			flags: "Ephemeral",
+		});
+		return;
+	}
+	command(interaction);
 });
 
 client.login(Bun.env.DISCORD_TOKEN);

@@ -30,6 +30,14 @@ const commands = [
 		.addBooleanOption((option) =>
 			option.setName("backup").setDescription("have a backup hero"),
 		),
+	new SlashCommandBuilder()
+		.setName("debuff")
+		.setDescription("A random debuff to make your game harder >:3")
+		.setContexts(
+			InteractionContextType.PrivateChannel,
+			InteractionContextType.BotDM,
+			InteractionContextType.Guild,
+		),
 ];
 const commandJson: RESTPostAPIApplicationCommandsJSONBody[] = [];
 for (const command of commands) {

@@ -58,7 +58,7 @@ heroes.all.push(...heroes.dps, ...heroes.support, ...heroes.tank);
 export const getRandomHero = (role: "support" | "dps" | "tank" | "all") => {
 	const index = Math.floor(Math.random() * heroes[role].length);
 	const hero = heroes[role].at(index);
-	if (!hero) return;
+	if (!hero) throw new Error("hero index failed");
 
 	const file = new AttachmentBuilder(`assets/${hero.file}`);
 	const embed = new EmbedBuilder()
