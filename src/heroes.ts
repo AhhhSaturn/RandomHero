@@ -14,6 +14,7 @@ export const heroes = {
 		{ name: "Mercy", file: "Mercy.png", color: "#ece9bd" },
 		{ name: "Moira", file: "Moira.png", color: "#9771e4" },
 		{ name: "Zenyatta", file: "Zenyatta.png", color: "#ece580" },
+		{ name: "Wuyang", file: "Wuyang.png", color: "#1d6eaf" },
 	],
 	tank: [
 		{ name: "D.Va", file: "D.Va.png", color: "#ed93c7" },
@@ -67,5 +68,5 @@ export const getRandomHero = (role: "support" | "dps" | "tank" | "all") => {
 		.setDescription(role === "all" ? "Random Hero" : `Random ${role} Hero`)
 		.setImage(`attachment://${hero.file}`);
 
-	return { embed, file };
+	return { embed, file, role };
 };

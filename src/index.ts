@@ -6,8 +6,8 @@ import {
 	type EmbedBuilder,
 	GatewayIntentBits,
 } from "discord.js";
-import { getRandomHero } from "./heroes";
 import { getDebuff } from "./debuff";
+import { getRandomHero } from "./heroes";
 
 const client = new Client({
 	intents: [
@@ -39,7 +39,7 @@ commandMap.set("random", (interaction) => {
 	files.push(mainHero?.file);
 
 	if (interaction.options.getBoolean("backup")) {
-		const backupHero = getRandomHero(role);
+		const backupHero = getRandomHero(mainHero.role);
 		embeds.push(backupHero?.embed);
 		files.push(backupHero?.file);
 	}
