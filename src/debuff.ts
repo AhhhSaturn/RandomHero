@@ -4,6 +4,7 @@ const debuffs = [
 	"No Ult",
 	"Increase your sensitivity by 20",
 	"Overwatch one default skin",
+	"No movement abilities",
 ];
 
 export const getDebuff = () => {
