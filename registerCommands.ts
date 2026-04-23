@@ -29,6 +29,9 @@ const commands = [
 		)
 		.addBooleanOption((option) =>
 			option.setName("backup").setDescription("have a backup hero"),
+		)
+		.addBooleanOption((option) =>
+			option.setName("stadium").setDescription("stadium heros"),
 		),
 	new SlashCommandBuilder()
 		.setName("debuff")
